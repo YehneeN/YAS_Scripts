@@ -26,15 +26,15 @@ install_basicTools() {
 }
 
 install_netTools() {
-    sudo apt-get install procps util-linux sysstat iproute2 numactl
-    sudo apt-get install tcpdump nicstat ethtool   
-    sudo apt-get install linux-tools-common linux-tools-$(uname -r) bpfcc-tools bpftrace trace-cmd
+    sudo apt-get install procps util-linux sysstat iproute2 numactl -y
+    sudo apt-get install tcpdump nicstat ethtool -y
+    sudo apt-get install linux-tools-common linux-tools-$(uname -r) bpfcc-tools bpftrace trace-cmd -y
 }
 
 install_keepassXC() {
     sudo add-apt-repository ppa:phoerious/keepassxc
     sudo apt-get update
-    sudo apt-get install keepassxc
+    sudo apt-get install keepassxc -y
 }
 
 install_Nala() {
@@ -132,7 +132,7 @@ needs_nvidia() {
             echo "Skipping..."
         fi
     else
-        echo "System is not using Nvidia."
+        echo "..."
     fi
 }
 
