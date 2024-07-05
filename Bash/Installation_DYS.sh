@@ -214,6 +214,7 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
             install_p10k
             sleep 1
             source ~/.zshrc
+            echo "Police d'écriture recommandée : https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k"
         fi
     fi
     sleep 1
