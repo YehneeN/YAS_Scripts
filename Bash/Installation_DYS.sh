@@ -31,6 +31,11 @@ install_netTools() {
     sudo apt-get install linux-tools-common linux-tools-$(uname -r) bpfcc-tools bpftrace trace-cmd -y
 }
 
+install_dufNdust() {
+    sudo apt-get install duf -y
+    brew -q install dust
+}
+
 install_keepassXC() {
     sudo add-apt-repository ppa:phoerious/keepassxc
     sudo apt-get update
@@ -257,6 +262,13 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
                 install_eza
             fi
         sleep 1
+        read -r -p "On installe duf et dust ? (Y/n)" dufndust_install
+            if  [[ $dufndust_install == "n" || $dufndust_install == "N" ]]; then
+                echo "Osef.."
+            else
+                install_dufNdust
+            fi
+        sleep 1
     else
         sleep 1
     fi    
@@ -275,6 +287,7 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
                     overwrite_fastfetchConfig
                 fi
         fi
+
 
     # Installations autres....
     read -r -p "Voulez-vous installer autre chose ? (y/N) " install_supp
