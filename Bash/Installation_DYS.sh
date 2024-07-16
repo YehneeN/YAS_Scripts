@@ -36,6 +36,13 @@ install_dufNdust() {
     brew -q install dust
 }
 
+install_flatpak() {
+    sudo add-apt-repository ppa:flatpak/stable
+    sudo apt-get update
+    sudo apt-get install flatpak -y
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+}
+
 install_keepassXC() {
     sudo add-apt-repository ppa:phoerious/keepassxc
     sudo apt-get update
@@ -194,6 +201,10 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
 
 # Check installation Nvidia
     needs_nvidia
+    sleep 1
+    
+# Installation Flatpak + Flathub ref.
+    install_flatpak
 
 # Choix persos
     echo "Lisez attentivement les prochaines questions et choisissez quoi installer."
