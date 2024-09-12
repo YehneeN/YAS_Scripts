@@ -67,8 +67,21 @@ function Show-InputForm {
     $form.Dispose()
 }
 
-# Lancement installation Sentinel
-Start-Process powershell -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -file C:\Tools\Scripts\Try_Sentinel.ps1" -NoNewWindow -Wait
+# Vérification de l'installation de Sentinel
+$sentinelOK = "Sentinel Agent"
+
+# Loop
+while ($true) {
+    $isOK = Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = '$sentinelOK'"
+
+    if ($isOK) {
+        Write-Host "$sentinelOK est installé. Poursuite du script..."
+        break # Sortie de la boucle
+    } else {
+        Write-Host "En attente de la fin d'installation de $sentinelOK ..."
+        Start-Sleep -Seconds 10
+    }
+}
 
 # Lancement du formulaire
-Show-InputForm -DefaultNumeroCentre "" -DefaultNumeroPoste ""
+Show-InputForm -DefaultNumeroCentre "" -DefaultNumeroPoste "" 
