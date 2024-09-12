@@ -68,10 +68,7 @@ function Show-InputForm {
 }
 
 # Lancement installation Sentinel
-$processSentinel = Start-Process powershell -Verb runAs -ArgumentList "-file C:\Tools\Scripts\Try_Sentinel.ps1" -PassThru
-
-# Attendre que Sentinel soit déployé
-Wait-Process -Id $processSentinel.Id
+Start-Process powershell -Verb runAs -ArgumentList "-ExecutionPolicy Bypass -file C:\Tools\Scripts\Try_Sentinel.ps1" -NoNewWindow -Wait
 
 # Lancement du formulaire
 Show-InputForm -DefaultNumeroCentre "" -DefaultNumeroPoste ""
