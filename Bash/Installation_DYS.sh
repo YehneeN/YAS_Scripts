@@ -137,7 +137,8 @@ fi
 needs_nvidia() {
     if lspci | grep -q NVIDIA; then
         read -r -p "Un GPU Nvidia a été détecté. Souhaitez-vous installer les drivers Nvidia (akmod-nvidia)?" wants_nvidia
-        if [[ $wants_nvidia == "Yes" || $wants_nvidia == "Y" || $wants_nvidia == "y" || $wants_nvidia == "Oui" || $wants_nvidia == "O" || $wants_nvidia == "o"]]; then
+        if [[ $wants_nvidia == "Yes" || $wants_nvidia == "Y" || $wants_nvidia == "y" || $wants_nvidia == "Oui" || $wants_nvidia == "O" || $wants_nvidia == "o"]]
+        then
             sudo apt-get install akmod-nvidia -y
             echo "Done!"
         else
