@@ -22,7 +22,8 @@ sys_update() {
 }
 
 install_basicTools() {
-    sudo apt-get install trash git curl wget bat unzip font-config -y
+    sudo apt-get install git curl wget bat unzip -y
+    # trash , font-config à remettre plus tard
 }
 
 install_netTools() {
