@@ -286,7 +286,7 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
 
     # Installation Fast Fetch
     read -r -p "Voulez-vous installer fastfetch ? (Y/n)" ff_install
-        if [[ $ff_install == "n" || $ff_install "N" ]]; then
+        if [[ $ff_install == "n" || $ff_install == "N" ]]; then
             echo "On laisse Fast Fetch dans son coin."
         else
             install_fastfetch
