@@ -1,14 +1,26 @@
+##############################################################################################################
+# MONITORING PROFIL : Set an alert when eventID 11004 appear.
+#
+# YehneeN - 2024
+##############################################################################################################
+
+# Var
+$LogSource = "Atera Monitoring Events"
+
 # Vérification du module
 if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
-    Write-Host "Le module Bitlocker n'est pas disponible pour cet appareil."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11002 -EntryType Error "Module bitlocker disabled or inexistant on this device."
     exit
 }
 
-# Check l'état Bitlocker sur C:
+# Check l'état Bitlocker sur C: et remplis les logs.
 $bitlockerStatus = Get-BitLockerVolume -MountPoint "C:"
 
 if ($bitlockerStatus.ProtectionStatus -eq "On") {
-    Write-Host "Le disque C: est chiffré par Bitlocker."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11003 -EntryType Error "System disk is currently protected by Bitlocker."
 } else {
-    Write-Host "Le disque C: n'est pas chiffré par Bitlocker."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11004 -EntryType Error "System disk is not currently protected by Bitlocker."
 }
