@@ -4,7 +4,7 @@
 ##############################################################################################################
 
 # Var
-$LogSource = "INTECH Events"
+$LogSource = "Atera Events"
 
 # Vérification du module
 if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
@@ -19,4 +19,4 @@ $netPath = {[sharedFolder]}
 # Activation Bitlocker en utilisant le TPM + sauvegarde de la clé 
 Enable-Bitlocker -MountPoint "C:" -TpmProtector -RecoveryKeyPath $netPath
 New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
-Write-EventLog -LogName "Application" -Source $LogSource -EventID 11005 -EntryType Error -Message "Bitlocker has been enabled on the system drive."
+Write-EventLog -LogName "Application" -Source $LogSource -EventID 11005 -EntryType Information -Message "Bitlocker has been enabled on the system drive."
