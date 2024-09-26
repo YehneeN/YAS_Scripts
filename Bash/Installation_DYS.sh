@@ -217,6 +217,7 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         echo "Ok.. on oublie zsh =("
     else
         switch_toZsh
+        curl -sL https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/Bash/zshrc -o ~/.zshrc
         source ~/.zshrc
     fi
     sleep 1
