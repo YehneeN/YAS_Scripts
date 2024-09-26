@@ -9,8 +9,8 @@ $LogSource = "Atera Monitoring Events"
 
 # Vérification du module
 if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
-    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
-    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11002 -EntryType Error "Module bitlocker disabled or inexistant on this device."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11002 -EntryType Error -Message "Module bitlocker disabled or inexistant on this device."
     exit
 }
 
@@ -18,9 +18,9 @@ if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
 $bitlockerStatus = Get-BitLockerVolume -MountPoint "C:"
 
 if ($bitlockerStatus.ProtectionStatus -eq "On") {
-    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
-    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11003 -EntryType Error "System disk is currently protected by Bitlocker."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11003 -EntryType Information -Message "System disk is currently protected by Bitlocker."
 } else {
-    New-EventLog -LogName "Application" -Source $LogSource -ErrorActionSilentlyContinue
-    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11004 -EntryType Error "System disk is not currently protected by Bitlocker."
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID 11004 -EntryType Error -Message "System disk is not currently protected by Bitlocker."
 }
