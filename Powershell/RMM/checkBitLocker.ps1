@@ -15,7 +15,7 @@ if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
 }
 
 # Check l'état Bitlocker sur C: et remplis les logs.
-$bitlockerStatus = Get-BitLockerVolume -MountPoint "C:"
+$bitlockerStatus = Get-BitLockerVolume -MountPoint $env:SystemDrive
 
 if ($bitlockerStatus.ProtectionStatus -eq "On") {
     New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
