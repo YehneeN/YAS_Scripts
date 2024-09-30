@@ -266,24 +266,22 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
     fi
 
     # Installation eza
-    if [ ! -f /home/linuxbrew/.linuxbrew/bin/brew ]; then
-        read -r -p "Faut-il ajouter également eza ? (Y/n)" eza_install
-            if [[ $eza_install == "n" || $eza_install == "N" ]]; then
-                echo "On installe pas eza."
-            else
-                install_eza
-            fi
-        sleep 1
-        read -r -p "On installe duf et dust ? (Y/n)" dufndust_install
-            if  [[ $dufndust_install == "n" || $dufndust_install == "N" ]]; then
-                echo "Osef.."
-            else
-                install_dufNdust
-            fi
-        sleep 1
+    read -r -p "Faut-il ajouter également eza ? (Y/n)" eza_install
+    if [[ $eza_install == "n" || $eza_install == "N" ]]; then
+        echo "On installe pas eza."
     else
-        sleep 1
-    fi    
+        install_eza
+    fi
+    sleep 1
+    read -r -p "On installe duf et dust ? (Y/n)" dufndust_install
+    if  [[ $dufndust_install == "n" || $dufndust_install == "N" ]]; then
+        echo "Osef.."
+    else
+        install_dufNdust
+    fi
+    sleep 1
+    sleep 1
+        
 
     # Installation Fast Fetch
     read -r -p "Voulez-vous installer fastfetch ? (Y/n)" ff_install
