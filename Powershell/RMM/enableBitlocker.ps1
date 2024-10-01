@@ -1,6 +1,5 @@
 ##############################################################################################################
-#
-# YehneeN - 2024
+#                   YehneeN - 2024
 ##############################################################################################################
 
 # Var
@@ -14,9 +13,11 @@ if (-not (Get-Module -ListAvailable -Name Bitlocker)) {
 }
 
 # Chemin du répertoire partagé pour sauvegarder la RecoveryKey
-#$netPath = {[sharedFolder]}
+$Path = {[sharedFolder]}
 
 # Activation Bitlocker en utilisant le TPM + sauvegarde de la clé 
-Enable-Bitlocker -MountPoint $env:SystemDrive -TpmProtector -SkipHardwareTest #-RecoveryKeyPath $netPath 
+Enable-Bitlocker -MountPoint $env:SystemDrive -TpmProtector -SkipHardwareTest
+Add-BitLockerKeyProtector -MountPoint $env:SystemDrive -RecoveryKeyProtector -RecoveryKeyPath $Path
+
 New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
 Write-EventLog -LogName "Application" -Source $LogSource -EventID 11005 -EntryType Information -Message "Bitlocker has been enabled on the system drive."
