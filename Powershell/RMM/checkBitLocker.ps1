@@ -23,4 +23,9 @@ if ($bitlockerStatus.ProtectionStatus -eq "On") {
 } else {
     New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
     Write-EventLog -LogName "Application" -Source $LogSource -EventID 11004 -EntryType Error -Message "System disk is not currently protected by Bitlocker."
+
+    if ($bitlockerStatus.EncryptionPercentage -eq 100 -and $bitlockerStatus.KeyProtector) {
+        Resume-Bitlocker -MountPoint $env:SystemDrive
+        Write-EventLog -LogName "Application" -Source $LogSource -EventID 11003 -EntryType Information -Message "Bitlocker has been resumed on the system disk."
+    }
 }
