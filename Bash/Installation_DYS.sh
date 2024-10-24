@@ -9,10 +9,10 @@
 
 # Color
 # -----------
-GREEN=$'\e[0;32m'
-RED=$'\e[0;31m'
-YELLOW=$'\e[0;33m'
-NC=$'\e[0m'
+GREEN='\e[0;32m'
+RED='\e[0;31m'
+YELLOW='\e[0;33m'
+NC='\e[0m'
 
 # Fonctions
 # -----------
@@ -164,51 +164,65 @@ install_p10k() {
     echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 }
 
+Header() {
+    echo "${GREEN}##############################################################################################${NC}"
+    echo "${GREEN}###                                                                                        ###${NC}"
+    echo "${GREEN}### Script d'installation rapide après mise en route d'une distribution basée sur Debian   ###${NC}"
+    echo "${GREEN}###           Rédigé par ${YELLOW}YehneeN ${GREEN}d'après les scripts d'${YELLOW}itsPoipoi${GREEN} <3                        ###${NC}"
+    echo "${GREEN}###                                                                                        ###${NC}"
+    echo "${GREEN}###${NC}                         ${RED}Testé sur Debian & Ubuntu uniquement${NC}${GREEN}                           ###${NC}"
+    echo "${GREEN}##############################################################################################${NC}"
+    echo
+}
+
 
 # Scripts
 # ------------
+clear 
 
-echo "##############################################################################################"
-echo "###                                                                                        ###"
-echo "### Script d'installation rapide après mise en route d'une distribution basée sur Debian   ###"
-echo "###           Rédigé par YehneeN d'après les scripts d'itsPoipoi <3                        ###"
-echo "###                                                                                        ###"
-echo "##############################################################################################"
-echo
+Header
 
-read -r -p "Démarrer l'installation ?" startupScript
+read -r -p "Démarrer l'installation ? " startupScript
 if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y" ||  $startupScript == "O" ||  $startupScript == "Yes" ||  $startupScript == "o" ]]; then
 
 # Mises à jours
-    echo "Mise à jour du système..."
+    echo "${GREEN}Mise à jour du système...${NC}"
     sys_update
-    sleep 1
+    sleep 3
+    clear
 
 # Installatio git, curl etc..
-    echo "Mise à jour des outils..."
+    echo "${GREEN}Mise à jour des outils...${NC}"
     install_basicTools
-    sleep 1
+    sleep 3
+    clear
 
 # Installation Keepass <3
-    echo "Installation de KeepassXC"
+    echo "${RED}Installation de KeepassXC${NC}"
     install_keepassXC
-    sleep 1
+    sleep 3
+    clear
 
 # Installation des outils réseaux
-    echo "Installation des outils réseaux"
+    echo "${RED}Installation des outils réseaux${NC}"
     install_netTools
-    sleep 1
+    sleep 3
+    clear
 
 # Check installation Nvidia
     needs_nvidia
-    sleep 1
+    sleep 3
+    clear
     
 # Installation Flatpak + Flathub ref.
     install_flatpak
+    sleep 3
+    clear
 
 # Choix persos
-    echo "Lisez attentivement les prochaines questions et choisissez quoi installer."
-    sleep 2
+    Header
+    echo "${RED}Lisez attentivement les prochaines questions et choisissez quoi installer.${NC}"
+    sleep 5
     echo
 
     # ZSH
@@ -219,8 +233,12 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         switch_toZsh
         curl -sL https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/Bash/zshrc -o ~/.zshrc
         source ~/.zshrc
+        clear
+        echo "Pensez à redémarrer le terminal à la fin de l'installation."
+        echo
+
     fi
-    sleep 1
+    sleep 3
 
     # Theme Powerlevel10k pour Zsh
     if [ "{{$SHELL}}" = "{{/usr/bin/zsh}}" ]; then
@@ -229,9 +247,11 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
             echo "C'est bien dommage =("
         else
             install_p10k
-            sleep 1
+            sleep 3
             source ~/.zshrc
-            echo "Police d'écriture recommandée : https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k"
+            clear
+            echo "${RED}Police d'écriture recommandée : https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k${NC}"
+            echo
         fi
     fi
     sleep 1
@@ -242,6 +262,8 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         echo "Ok, on reste sur APT"
     else
         install_Nala
+        sleep 3
+        clear
         if [ "{{$SHELL}}" = "{{/usr/bin/zsh}}" ]; then
             read -r -p "On switch d'APT vers Nala ? (Y/n)" nala_switch
                 if [[ $nala_switch == "n" || $nala_switch == "N" ]]; then
@@ -259,10 +281,11 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         echo "On les laisse de côté.."
     else
         install_homeBrew
-        sleep 1
+        sleep 3
         install_fzf
-        sleep 1
+        sleep 3
         install_zoxide
+        clear
     fi
 
     # Installation eza
@@ -271,6 +294,8 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         echo "On installe pas eza."
     else
         install_eza
+        sleep 3
+        clear
     fi
     sleep 1
     read -r -p "On installe duf et dust ? (Y/n)" dufndust_install
@@ -278,6 +303,8 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         echo "Osef.."
     else
         install_dufNdust
+        sleep 3
+        clear
     fi
     sleep 1
     sleep 1
@@ -289,12 +316,15 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
             echo "On laisse Fast Fetch dans son coin."
         else
             install_fastfetch
-            sleep 1
+            sleep 3
+            clear
             read -r -p "Faut-il copier la configuration de Poipoi ? (Y/n)" pwapwa_ff
                 if [[ $pwapwa_ff == "n" || $pwapwa_ff == "N" ]]; then
                     echo "Osef de sa configuration...."
                 else
                     overwrite_fastfetchConfig
+                    sleep 3 
+                    clear
                 fi
         fi
 
