@@ -1,3 +1,11 @@
+#################################################################
+#
+#   Récupérer la liste des erreurs de connexions (eventID 4625).
+#
+#   YehneeN -2024
+#################################################################
+
+
 # Définir une plage de dates pour limiter les événements récupérés
 $StartDate = (Get-Date).AddDays(-7)  # Par exemple, récupérer les événements des 7 derniers jours
 $EndDate = Get-Date
