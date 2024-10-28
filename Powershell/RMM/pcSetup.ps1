@@ -122,4 +122,3 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 
 
 # Call rename automatique - YYYY-SN
-
