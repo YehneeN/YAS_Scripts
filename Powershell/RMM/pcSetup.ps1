@@ -169,10 +169,10 @@ function Show-InputForm {
         $nomduPoste = $textBoxCompName.Text
 
         Write-Host "Le nom de l'ordinateur sera $nomduPoste"
-		Set-Volume -DriveLetter C -NewFileSystemLabel "$nomduPoste"
-		Rename-Computer -newname "$nomduPoste" -Restart
-        New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+        Set-Volume -DriveLetter C -NewFileSystemLabel "$nomduPoste"
+		New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
         Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Rename du poste : $nomduPoste."
+        Rename-Computer -newname "$nomduPoste" -Restart
     }
 
     # 
