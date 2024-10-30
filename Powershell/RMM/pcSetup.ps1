@@ -8,7 +8,10 @@
 
 # Var
 $LogSource = "Atera Monitoring Events"
-$eID = "10000"
+$eID = "00001"
+
+
+[void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 
 # Fonctions
 #function LayoutDesign {
@@ -25,19 +28,21 @@ $eID = "10000"
 #    }
 
 # Modifications des paramètres d'alimentation
-#function IntechPower {
-#    POWERCFG -DUPLICATESCHEME 381b4222-f694-41f0-9685-ff5bb260df2e 381b4222-f694-41f0-9685-ff5bb260aaaa
-#    POWERCFG -CHANGENAME 381b4222-f694-41f0-9685-ff5bb260aaaa "Intech Power Management"
-#    POWERCFG -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260aaaa
-#    POWERCFG -CHANGE -monitor-timeout-ac 15
-#    POWERCFG -CHANGE -monitor-timeout-dc 5
-#    POWERCFG -CHANGE -disk-timeout-ac 30
-#    POWERCFG -CHANGE -disk-timeout-dc 5
-#    POWERCFG -CHANGE -standby-timeout-ac 0
-#    POWERCFG -CHANGE -standby-timeout-dc 30
-#    POWERCFG -CHANGE -hibernate-timeout-ac 0
-#    POWERCFG -CHANGE -hibernate-timeout-dc 0
-#}
+function IntechPower {
+    POWERCFG -DUPLICATESCHEME 381b4222-f694-41f0-9685-ff5bb260df2e 381b4222-f694-41f0-9685-ff5bb260aaaa
+    POWERCFG -CHANGENAME 381b4222-f694-41f0-9685-ff5bb260aaaa "Intech Power Management"
+    POWERCFG -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260aaaa
+    POWERCFG -CHANGE -monitor-timeout-ac 15
+    POWERCFG -CHANGE -monitor-timeout-dc 5
+    POWERCFG -CHANGE -disk-timeout-ac 30
+    POWERCFG -CHANGE -disk-timeout-dc 5
+    POWERCFG -CHANGE -standby-timeout-ac 0
+    POWERCFG -CHANGE -standby-timeout-dc 30
+    POWERCFG -CHANGE -hibernate-timeout-ac 0
+    POWERCFG -CHANGE -hibernate-timeout-dc 0
+}
+
+IntechPower
 
 # Debloat de certaines applis Windows 
 Write-Host "Désinstallation de certaines applications Windows inutiles..."
@@ -121,4 +126,58 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 #
 
 
-# Call rename automatique - YYYY-SN
+
+function Show-InputForm {
+    param (
+        [string]$DefaultName = ""
+    )
+
+    # Creation du formulaire
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "INTECH | Service Informatique"
+    $form.Size = New-Object System.Drawing.Size(400,200)
+    $form.StartPosition = "CenterScreen"
+
+    # Creation des deux labels (n° centre + n° poste)
+    $labelCompName = New-Object System.Windows.Forms.Label
+    $labelCompName.Location = New-Object System.Drawing.Size(10,20)
+    $labelCompName.Size = New-Object System.Drawing.Size(200,20)
+    $labelCompName.Text = "Nom du poste: "
+    $form.Controls.Add($labelCompName)
+
+    # Creation des champs à remplir
+    $textBoxCompName = New-Object System.Windows.Forms.TextBox
+    $textBoxCompName.Location = New-Object System.Drawing.Size(220,50)
+    $textBoxCompName.Size = New-Object System.Drawing.Size(150,20)
+    $textBoxCompName.Text = $DefaultName
+    $form.Controls.Add($textBoxCompName)
+
+    # Bouton OK pour valider
+    $buttonOK = New-Object System.Windows.Forms.Button
+    $buttonOK.Location = New-Object System.Drawing.Size(300,100)
+    $buttonOK.Size = New-Object System.Drawing.Size(75,23)
+    $buttonOK.Text = "OK"
+    $buttonOK.DialogResult = [System.Windows.Forms.DialogResult]::OK
+    $form.Controls.Add($buttonOK)
+
+    # Resultat du formulaire
+    $result = $form.ShowDialog()
+
+    # Si "OK" --> Appliquer le changement de nom
+    if ($result -eq [System.Windows.Forms.DialogResult]::OK) {
+        # Recuperer les valeurs
+        $nomduPoste = $textBoxCompName.Text
+
+        Write-Host "Le nom de l'ordinateur sera $nomduPoste"
+		Set-Volume -DriveLetter C -NewFileSystemLabel "$nomduPoste"
+		Rename-Computer -newname "$nomduPoste" -Restart
+        New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+        Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Rename du poste : $nomduPoste."
+    }
+
+    # 
+    $form.Dispose()
+}
+
+# Lancement du formulaire
+Show-InputForm -DefaultName ""
