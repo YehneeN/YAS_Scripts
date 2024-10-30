@@ -38,14 +38,14 @@ if ($SMB1Status.State -eq "Enabled") {
         function Open-MainForm {
             [void][reflection.assembly]::Load('System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
             [void][reflection.assembly]::Load('System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089')
-	        [void][reflection.assembly]::Load('System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
+            [void][reflection.assembly]::Load('System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a')
             [System.Windows.Forms.Application]::EnableVisualStyles()
-	        $MainForm = New-Object 'System.Windows.Forms.Form'
-	        $panel2 = New-Object 'System.Windows.Forms.Panel'
-	        $ButtonCancel = New-Object 'System.Windows.Forms.Button'
+            $MainForm = New-Object 'System.Windows.Forms.Form'
+            $panel2 = New-Object 'System.Windows.Forms.Panel'
+            $ButtonCancel = New-Object 'System.Windows.Forms.Button'
             $ButtonPostpone1Hour = New-Object 'System.Windows.Forms.Button'
-	        $ButtonRestartNow = New-Object 'System.Windows.Forms.Button'
-	        $panel1 = New-Object 'System.Windows.Forms.Panel'
+            $ButtonRestartNow = New-Object 'System.Windows.Forms.Button'
+            $panel1 = New-Object 'System.Windows.Forms.Panel'
             $labelITSystemsMaintenance = New-Object 'System.Windows.Forms.Label'
             $labelSecondsLeftToRestart = New-Object 'System.Windows.Forms.Label'
 	        $labelTime = New-Object 'System.Windows.Forms.Label'
