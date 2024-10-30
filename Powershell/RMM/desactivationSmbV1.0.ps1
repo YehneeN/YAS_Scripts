@@ -48,49 +48,53 @@ if ($SMB1Status.State -eq "Enabled") {
             $panel1 = New-Object 'System.Windows.Forms.Panel'
             $labelITSystemsMaintenance = New-Object 'System.Windows.Forms.Label'
             $labelSecondsLeftToRestart = New-Object 'System.Windows.Forms.Label'
-	        $labelTime = New-Object 'System.Windows.Forms.Label'
-	        $labelInOrderToApplySecuri = New-Object 'System.Windows.Forms.Label'
-	        $timerUpdate = New-Object 'System.Windows.Forms.Timer'
+            $labelTime = New-Object 'System.Windows.Forms.Label'
+            $labelInOrderToApplySecuri = New-Object 'System.Windows.Forms.Label'
+            $timerUpdate = New-Object 'System.Windows.Forms.Timer'
             $InitialFormWindowState = New-Object 'System.Windows.Forms.FormWindowState'
-	        $TotalTime = 900
-	        $MainForm_Load={
-    	        $labelTime.Text = "{0:D2}" -f $TotalTime
+            $TotalTime = 900
+            $MainForm_Load={
+                $labelTime.Text = "{0:D2}" -f $TotalTime
                 $script:StartTime = (Get-Date).AddSeconds($TotalTime) 
                 $timerUpdate.Start()
 	        }
  	        $timerUpdate_Tick={ 
-            [TimeSpan]$span = $script:StartTime - (Get-Date)
-  	        $hours = "{0:00}" -f $span.Hours
-  	        $mins = "{0:00}" -f $span.Minutes
-	        $secs = "{0:00}" -f $span.Seconds
-	        $labelTime.Text = "{0}:{1}:{2}" -f $hours, $mins, $secs
-            $timerUpdate.Start()
-  	            if ($span.TotalSeconds -le 0) {
+                [TimeSpan]$span = $script:StartTime - (Get-Date)
+                $hours = "{0:00}" -f $span.Hours
+                $mins = "{0:00}" -f $span.Minutes
+                $secs = "{0:00}" -f $span.Seconds
+                $labelTime.Text = "{0}:{1}:{2}" -f $hours, $mins, $secs
+                $timerUpdate.Start()
+                if ($span.TotalSeconds -le 0) {
                     $timerUpdate.Stop()
                     Restart-Computer -Force
-    	        }
+                }
      	    }
             $ButtonRestartNow_Click = {
                 Restart-Computer -Force
-	        }	
+            }	
             $ButtonPostpone1Hour_Click={
     	        shutdown -r -t 3600
     	        $MainForm.Close()
-	        }	
+            }	
             $ButtonCancel_Click={ 
                 $MainForm.Close()
-	        }	
+            }	
             $labelITSystemsMaintenance_Click={ 
-        	}	
+
+            }	
             $panel2_Paint=[System.Windows.Forms.PaintEventHandler]{     	
-	        }
+
+            }
 	        $labelTime_Click={
-   	        }
+
+            }
             $Form_StateCorrection_Load={
-            $MainForm.WindowState = $InitialFormWindowState
-	        }
+                $MainForm.WindowState = $InitialFormWindowState
+            }
 	        $Form_StoreValues_Closing={
-	        }
+
+            }
             $Form_Cleanup_FormClosed={
     	        try {
                     $ButtonCancel.remove_Click($buttonCancel_Click)
@@ -99,7 +103,7 @@ if ($SMB1Status.State -eq "Enabled") {
                     $panel2.remove_Paint($panel2_Paint)
                     $labelITSystemsMaintenance.remove_Click($labelITSystemsMaintenance_Click)
                     $labelTime.remove_Click($labelTime_Click)
-        	        $MainForm.remove_Load($MainForm_Load)
+                    $MainForm.remove_Load($MainForm_Load)
                     $timerUpdate.remove_Tick($timerUpdate_Tick)
                     $MainForm.remove_Load($Form_StateCorrection_Load)
                     $MainForm.remove_Closing($Form_StoreValues_Closing)
@@ -107,23 +111,23 @@ if ($SMB1Status.State -eq "Enabled") {
                 }
     	        catch [Exception]
     	        { }
-	        }
+            }
             $MainForm.SuspendLayout()
             $panel2.SuspendLayout()
-	        $panel1.SuspendLayout()
+            $panel1.SuspendLayout()
             $MainForm.Controls.Add($panel2)
             $MainForm.Controls.Add($panel1)
             $MainForm.Controls.Add($labelSecondsLeftToRestart)
             $MainForm.Controls.Add($labelTime)
             $MainForm.Controls.Add($labelInOrderToApplySecuri)
-	        $MainForm.AutoScaleDimensions = '6, 13'
+            $MainForm.AutoScaleDimensions = '6, 13'
             $MainForm.AutoScaleMode = 'Font'
             $MainForm.BackColor = 'White'
             $MainForm.ClientSize = '373, 279'
             $MainForm.MaximizeBox = $False
             $MainForm.MinimizeBox = $False
-	        $MainForm.Name = 'MainForm'
-	        $MainForm.ShowIcon = $False
+            $MainForm.Name = 'MainForm'
+            $MainForm.ShowIcon = $False
             $MainForm.ShowInTaskbar = $False
             $MainForm.StartPosition = 'CenterScreen'
 	        $MainForm.Text = 'INTECH | Service Informatique'
@@ -132,11 +136,11 @@ if ($SMB1Status.State -eq "Enabled") {
             $panel2.Controls.Add($ButtonCancel)
             $panel2.Controls.Add($ButtonPostpone1Hour)
             $panel2.Controls.Add($ButtonRestartNow)
-	        $panel2.BackColor = 'ScrollBar'
-	        $panel2.Location = '0, 205'
-	        $panel2.Name = 'panel2'
-	        $panel2.Size = '378, 80'
-	        $panel2.TabIndex = 9
+            $panel2.BackColor = 'ScrollBar'
+            $panel2.Location = '0, 205'
+            $panel2.Name = 'panel2'
+            $panel2.Size = '378, 80'
+            $panel2.TabIndex = 9
             $panel2.add_Paint($panel2_Paint)
             $ButtonCancel.Location = '250, 17'
 	        $ButtonCancel.Name = 'ButtonCancel'
@@ -207,12 +211,12 @@ Veuillez sauvegarder tous vos fichiers maintenant pour éviter toute perte de do
             $panel2.ResumeLayout()
             $MainForm.ResumeLayout()
             $InitialFormWindowState = $MainForm.WindowState
-	        $MainForm.add_Load($Form_StateCorrection_Load)
+            $MainForm.add_Load($Form_StateCorrection_Load)
             $MainForm.add_FormClosed($Form_Cleanup_FormClosed)
             $MainForm.add_Closing($Form_StoreValues_Closing)
             return $MainForm.ShowDialog()
         }
-    Main ($CommandLine)
+        Main ($CommandLine)
     } 
 } else {
     New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
