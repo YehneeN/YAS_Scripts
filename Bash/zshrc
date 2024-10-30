@@ -133,6 +133,17 @@ sys_update () {
 	sudo nala update && sudo nala upgrade -y
 }
 
+cd() {
+	if [ -n "$1" ]; then
+		builtin cd "$1" && clear && ls
+	else
+		dir=$(find / -type d 2>/dev/null | fzf --preview 'tree -C {}')
+		if [ -n "$dir" ]; then
+			builtin cd "$dir" && clear && ls
+		fi
+	fi
+}
+
 # Copy and go to the directory
 cpg() {
 	if [ -d "$2" ]; then
@@ -294,9 +305,13 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='trash -v'
 alias mkdir='mkdir -p'
+alias ping='ping -c 10'
 alias less='less -R'
 alias apt='sudo apt-get'
 alias nala="sudo nala"
+alias vi='nvim'
+alias svi='sudo vi'
+alias vis='nvim "+set si"'
 alias curl="curl -#"
 alias goTrash="cd ~/.local/share/Trash"
 
@@ -308,7 +323,12 @@ alias bios="sudo grub-reboot 2 && reboot"
 alias ff="fastfetch"
 alias zi="__zoxide_zi"
 alias reload="source ~/.zshrc"
+alias updt="nala update ; nala upgrade"
+alias iptables="sudo iptables"
 alias dl="z Téléchargements"
+alias lg="lazygit"
+
+
 
 
 export NVM_DIR="$HOME/.nvm"
