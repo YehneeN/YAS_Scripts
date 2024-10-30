@@ -170,7 +170,7 @@ function Show-InputForm {
 
         Write-Host "Le nom de l'ordinateur sera $nomduPoste"
         Set-Volume -DriveLetter C -NewFileSystemLabel "$nomduPoste"
-		New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+        New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
         Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Rename du poste : $nomduPoste."
         Rename-Computer -newname "$nomduPoste" -Restart
     }
