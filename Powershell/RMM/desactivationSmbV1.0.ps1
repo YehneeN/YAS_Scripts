@@ -57,8 +57,8 @@ if ($SMB1Status.State -eq "Enabled") {
                 $labelTime.Text = "{0:D2}" -f $TotalTime
                 $script:StartTime = (Get-Date).AddSeconds($TotalTime) 
                 $timerUpdate.Start()
-	        }
- 	        $timerUpdate_Tick={ 
+            }
+            $timerUpdate_Tick={ 
                 [TimeSpan]$span = $script:StartTime - (Get-Date)
                 $hours = "{0:00}" -f $span.Hours
                 $mins = "{0:00}" -f $span.Minutes
@@ -69,7 +69,7 @@ if ($SMB1Status.State -eq "Enabled") {
                     $timerUpdate.Stop()
                     Restart-Computer -Force
                 }
-     	    }
+            }
             $ButtonRestartNow_Click = {
                 Restart-Computer -Force
             }	
@@ -130,8 +130,8 @@ if ($SMB1Status.State -eq "Enabled") {
             $MainForm.ShowIcon = $False
             $MainForm.ShowInTaskbar = $False
             $MainForm.StartPosition = 'CenterScreen'
-	        $MainForm.Text = 'INTECH | Service Informatique'
-	        $MainForm.TopMost = $True
+            $MainForm.Text = 'INTECH | Service Informatique'
+            $MainForm.TopMost = $True
             $MainForm.add_Load($MainForm_Load)
             $panel2.Controls.Add($ButtonCancel)
             $panel2.Controls.Add($ButtonPostpone1Hour)
@@ -143,8 +143,8 @@ if ($SMB1Status.State -eq "Enabled") {
             $panel2.TabIndex = 9
             $panel2.add_Paint($panel2_Paint)
             $ButtonCancel.Location = '250, 17'
-	        $ButtonCancel.Name = 'ButtonCancel'
-	        $ButtonCancel.Size = '77, 45'
+            $ButtonCancel.Name = 'ButtonCancel'
+            $ButtonCancel.Size = '77, 45'
             $ButtonCancel.TabIndex = 7
             $ButtonCancel.Text = 'Annuler'
             $ButtonCancel.UseVisualStyleBackColor = $True
