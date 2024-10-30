@@ -135,11 +135,11 @@ sys_update () {
 
 cd() {
 	if [ -n "$1" ]; then
-		builtin cd "$1" && clear && ls
+		builtin cd "$1" && clear && eza -a --icons --group-directories-first
 	else
 		dir=$(find / -type d 2>/dev/null | fzf --preview 'tree -C {}')
 		if [ -n "$dir" ]; then
-			builtin cd "$dir" && clear && ls
+			builtin cd "$dir" && clear && eza -a --icons --group-directories-first
 		fi
 	fi
 }
@@ -316,6 +316,7 @@ alias curl="curl -#"
 alias goTrash="cd ~/.local/share/Trash"
 
 # Personal Alias's
+alias cdc="ssh -p 5657 dys@panel.cdf.ovh"
 alias sht="sudo shutdown -P now"
 alias rbt="sudo shutdown -r now"
 alias wrbt="sudo grub-reboot 1 && reboot"
@@ -327,6 +328,8 @@ alias updt="nala update ; nala upgrade"
 alias iptables="sudo iptables"
 alias dl="z Téléchargements"
 alias lg="lazygit"
+alias msrv="~/SharedProjs/PubShare/.minisrv ~/SharedProjs/PubShare"
+alias oticovpn="sudo openvpn --config Téléchargements/SSLVPN_client_config.ovpn"
 
 
 
