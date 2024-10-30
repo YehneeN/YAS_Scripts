@@ -6,6 +6,13 @@
 #   YehneeN -2024
 #################################################################
 
+# Vérification des droits administratifs
+If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host "Le script n'est pas exécuté en tant qu'administrateur. Relance en cours..."
+    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    Exit
+}
+
 # Var
 $LogSource = "Atera Monitoring Events"
 $eID = "00001"
