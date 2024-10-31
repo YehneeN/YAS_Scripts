@@ -241,6 +241,16 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
         install_termscp
     fi
 
+    clear
+    echo ".................................................."
+    echo "Si vous souhaitez désinstaller termSCP plus tard :"
+    echo "  - rm -f $(which termscp)"
+    echo "  - rm -rf $HOME/.config/termscp"
+    echo ".................................................."
+
+    sleep 10
+    clear
+
     # ZSH
     read -r -p "Voulez-vous installer zsh ? (Y/n)" zsh_install
     if [[ $zsh_install == "n" || $zsh_install == "N" ]]; then
