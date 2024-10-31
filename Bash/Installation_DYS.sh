@@ -164,6 +164,13 @@ install_p10k() {
     echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 }
 
+install_termscp() {
+    clear
+    echo "Lancement du script d'installation TermSCP..."
+    sleep 5
+    curl -sSLf http://get-termscp.veeso.dev | sh
+}
+
 Header() {
     echo "${GREEN}##############################################################################################${NC}"
     echo "${GREEN}###                                                                                        ###${NC}"
@@ -224,6 +231,15 @@ if [[ $startupScript == "Oui" || $startupScript == "y" ||  $startupScript == "Y"
     echo "${RED}Lisez attentivement les prochaines questions et choisissez quoi installer.${NC}"
     sleep 5
     echo
+
+    # TermSCP
+    read -r -p "Voulez-vous installer termSCP ? (Y/n)" termscp_ins
+    if [[ $termscp_ins == "n" || $termscp_ins == "N" ]]; then
+        clear
+        sleep 3
+    else 
+        install_termscp
+    fi
 
     # ZSH
     read -r -p "Voulez-vous installer zsh ? (Y/n)" zsh_install
