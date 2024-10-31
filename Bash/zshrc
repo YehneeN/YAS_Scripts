@@ -316,7 +316,6 @@ alias curl="curl -#"
 alias goTrash="cd ~/.local/share/Trash"
 
 # Personal Alias's
-alias cdc="ssh -p 5657 dys@panel.cdf.ovh"
 alias sht="sudo shutdown -P now"
 alias rbt="sudo shutdown -r now"
 alias wrbt="sudo grub-reboot 1 && reboot"
@@ -329,7 +328,6 @@ alias iptables="sudo iptables"
 alias dl="z Téléchargements"
 alias lg="lazygit"
 alias msrv="~/SharedProjs/PubShare/.minisrv ~/SharedProjs/PubShare"
-alias oticovpn="sudo openvpn --config Téléchargements/SSLVPN_client_config.ovpn"
 
 
 
