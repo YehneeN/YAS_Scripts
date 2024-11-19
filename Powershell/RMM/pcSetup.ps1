@@ -1,10 +1,9 @@
-#################################################################
-#
-#   Modifications de paramètres suite à installation W11
-#       Pour MDT/WDS - Suite rename - W.I.P.
-#
-#   YehneeN -2024
-#################################################################
+#########################################################
+#						                            	#
+#	YehneeN					                        	#
+#	INTECH - 2024				                    	#
+#						                            	#
+#########################################################
 
 # Vérification des droits administratifs
 If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -13,31 +12,97 @@ If (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     Exit
 }
 
-# Var
-$LogSource = "Atera Monitoring Events"
-$eID = "00001"
-
-
 [void][System.Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 
-# Fonctions
-#function LayoutDesign {
-#    If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]"Administrator")) {
-#        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-#        Exit
-#    }
-#    Import-StartLayout -LayoutPath "CheminVersLeFichierLayout.xml" -MountPath $env:SystemDrive\
-#    }
+Write-Progress -Activity "Définition des variables ..." -Status "Tâche 1 sur 11" -PercentComplete 0
+Start-Sleep -Seconds 1
 
-#function oemInf {
-#    Invoke-WebRequest -Uri "CheminVers\Intech.bmp" -OutFile "c:\windows\system32\Intech.bmp"
-#    New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Name "Manufacturer" -Value "Intech"  -PropertyType "String" -Force
-#    }
+# Var
+$LogSource = "Atera Mon. Events"
+$eID = "00001"
+$toolsFolderPath = ""
+$ateraMsiFile = ""
+$ateraMsiLink = ""
+$ateraMsiFolder = ""
+$ateraScript = ""
+
+Write-Progress -Activity "Vérification du dossier Tools ..." -Status "Tâche 2 sur 11" -PercentComplete 10
+Start-Sleep -Seconds 1
+
+# Try Intech Tools Folder
+if (-not (Test-Path -Path $toolsFolderPath)) {
+    New-Item -ItemType Directory -Path $toolsFolderPath
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Création du dossier $toolsFolderPath."
+}
+
+Write-Progress -Activity "Vérification du dossier SvcAtera ..." -Status "Tâche 3 sur 11" -PercentComplete 20
+Start-Sleep -Seconds 1
+
+# Try Atera Folder & Agent
+if (-not (Test-Path -Path $ateraMsiFolder)) {
+    New-Item -ItemType Directory -Path $ateraMsiFolder
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Création du dossier $ateraMsiFolder."
+}
+
+Write-Progress -Activity "Vérification du fichier d'installation de l'agent ..." -Status "Tâche 4 sur 11" -PercentComplete 30
+Start-Sleep -Seconds 1
+
+if (-not (Test-Path -Path $ateraMsiFile)) {
+    Invoke-WebRequest -Uri $ateraMsiLink -Outfile $ateraMsiFile
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Téléchargement du fichier MSI Atera Agent."
+}
+if (Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'AteraAgent'" -ErrorAction SilentlyContinue){
+} else {
+    Start-Process msiexec.exe -ArgumentList "/i `"$ateraMsiFile`" /qn IntegratorLogin=****@******** CompanyId=** AccountId=***********" -Wait
+    New-EventLog -LogName "Application" -Source $LogSource -ErrorAction SilentlyContinue
+    Write-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Installation Atera Agent."
+}
+
+Write-Progress -Activity "Création du script Try_Atera ..." -Status "Tâche 5 sur 11" -PercentComplete 40
+Start-Sleep -Seconds 1
+
+# Création Try_Atera.ps1
+if (-not (Test-Path -Path $ateraScript)) {
+    $content = @"
+# Attendre que le réseau soit disponible
+while (-not (Test-Connection -ComputerName "8.8.8.8" -Count 1 -Quiet)) {
+    Start-Sleep -Seconds 10
+}
+# Try Atera Folder & Agent
+if (-not (Test-Path -Path "")) {
+    New-Item -ItemType Directory -Path ""
+}
+if (-not (Test-Path -Path "")) {
+    Invoke-WebRequest -Uri "" -Outfile ""}
+if (Get-WmiObject -Query "SELECT * FROM Win32_Product WHERE Name = 'AteraAgent'" -ErrorAction SilentlyContinue){
+} else {
+    Start-Process msiexec.exe -ArgumentList "/i `"`" /qn IntegratorLogin= CompanyId=42 AccountId=" -Wait
+}
+"@
+    New-Item -ItemType File -Path $ateraScript
+    Set-Content -Path $ateraScript -Value $content
+}
+
+Write-Progress -Activity "Création de la tâche Try_Atera planifiée au démarrage du poste ..." -Status "Tâche 6 sur 11" -PercentComplete 50
+Start-Sleep -Seconds 1
+
+## Créer la tâche planifiée @ boot
+$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-File `"`""
+$trigger = New-ScheduledTaskTrigger -AtStartup
+$principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount
+$settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+Register-ScheduledTask -TaskName "RunAteraScriptAtStartup" -Action $action -Trigger $trigger -Principal $principal -Settings $settings
+
+Write-Progress -Activity "Modification des paramètres d'alimentation ..." -Status "Tâche 7 sur 11" -PercentComplete 60
+Start-Sleep -Seconds 1
 
 # Modifications des paramètres d'alimentation
-function IntechPower {
+function PowerM {
     POWERCFG -DUPLICATESCHEME 381b4222-f694-41f0-9685-ff5bb260df2e 381b4222-f694-41f0-9685-ff5bb260aaaa
-    POWERCFG -CHANGENAME 381b4222-f694-41f0-9685-ff5bb260aaaa "Intech Power Management"
+    POWERCFG -CHANGENAME 381b4222-f694-41f0-9685-ff5bb260aaaa "Power Management"
     POWERCFG -SETACTIVE 381b4222-f694-41f0-9685-ff5bb260aaaa
     POWERCFG -CHANGE -monitor-timeout-ac 15
     POWERCFG -CHANGE -monitor-timeout-dc 5
@@ -49,29 +114,10 @@ function IntechPower {
     POWERCFG -CHANGE -hibernate-timeout-dc 0
 }
 
-IntechPower
+PowerM
 
-# Debloat de certaines applis Windows 
-Write-Host "Désinstallation de certaines applications Windows inutiles..."
-Get-AppxPackage "Microsoft.3DBuilder" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.BingFinance" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.BingNews" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.BingSports" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.BingWeather" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.Getstarted" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.People" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.Windows.Photos" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.WindowsAlarms" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.WindowsMaps" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.WindowsPhone" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.XboxApp" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.ZuneMusic" | Remove-AppxPackage
-Get-AppxPackage "Microsoft.ZuneVideo" | Remove-AppxPackage
-Get-AppxPackage "king.com.CandyCrushSodaSaga" | Remove-AppxPackage
-Get-AppxPackage "king.com.CandyCrushSaga" | Remove-AppxPackage
-Get-AppxPackage "king.com.CandyCrushFriends" | Remove-AppxPackage
+Write-Progress -Activity "Tweaking Windows (Fastboot, Sense, Télémétrie & Feedback OFF) ..." -Status "Tâche 8 sur 11" -PercentComplete 70
+Start-Sleep -Seconds 1
 
 # Désactivation fastboot Windows
 Write-Host "Désactivation du démarrage rapide Windows..."
@@ -107,32 +153,15 @@ If (!(Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo
 }
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value 0
 
-# Restriction des updates Windows en P2P au réseau local uniquement
-Write-Host "Restriction des updates Windows en P2P au réseau local uniquement..."
-Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" -Name "DODownloadMode" -Type DWord -Value 1
-If (!(Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization")) {
-    New-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" | Out-Null
-}
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization" -Name "SystemSettingsDownloadMode" -Type DWord -Value 3
+Write-Progress -Activity "Définition des infos OEM ..." -Status "Tâche 9 sur 11" -PercentComplete 90
+Start-Sleep -Seconds 1
 
-# Changement de la vue par défaut de l'explorateur de fichier
-Write-Host "Changement de la vue par défaut de l'explorateur de fichiers..."
-Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "LaunchTo" -Type DWord -Value 1
-
-
-# Modification du layout Win11 pour les utilisateurs + Branding OEM
-# LayoutDesign
-# oemInf
-
-# Verifications et Logging
-#   IF OK COND 1
-#       New-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Message"
-#   ELSE    New-EventLog -LogName "Application" -Source $LogSource -EventID $eID -EntryType Information -Message "Autre Message"
-#
-#    etc....
-#
-
-
+# OEM Info
+New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Name "Manufacturer" -Value ""  -PropertyType "String" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Name "SupportHours" -Value ""  -PropertyType "String" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Name "SupportPhone" -Value ""  -PropertyType "String" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" -Name "SupportURL" -Value ""  -PropertyType "String" -Force
 
 function Show-InputForm {
     param (
@@ -141,7 +170,7 @@ function Show-InputForm {
 
     # Creation du formulaire
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "INTECH | Service Informatique"
+    $form.Text = ""
     $form.Size = New-Object System.Drawing.Size(400,200)
     $form.StartPosition = "CenterScreen"
 
@@ -185,6 +214,15 @@ function Show-InputForm {
     # 
     $form.Dispose()
 }
+
+Write-Progress -Activity "Désactivation du compte administrateur ..." -Status "Tâche 10 sur 11" -PercentComplete 95
+Start-Sleep -Seconds 1
+
+# Desac. Administrateur
+net user Administrateur /active:no
+
+Write-Progress -Activity "Formulaire de renommage ..." -Status "Tâche finale" -PercentComplete 99
+Start-Sleep -Seconds 1
 
 # Lancement du formulaire
 Show-InputForm -DefaultName ""
