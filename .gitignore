@@ -1,4 +1,5 @@
-## PS Logs
-Powershell/*.log
-Dev/*.ps1
-OLD/*.ps1
+# .gitignore file
+
+*.log
+Dev/
+OLD/
