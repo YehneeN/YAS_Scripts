@@ -1,4 +1,4 @@
 ## PS Logs
 Powershell/*.log
-`#_Dev/*.ps1
-`#_OLD/*.ps1
+Dev/*.ps1
+OLD/*.ps1
