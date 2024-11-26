@@ -19,7 +19,7 @@ if (-Not (Test-Path -Path $dirPath)) {
     New-Item -ItemType Directory -Path $dirPath
 }
 
-# Transfert du blob sur le serveur WebDAV avec Invoke-WebRequest
+# Transfert du blob depuis le serveur WebDAV avec Invoke-WebRequest
 $credentials = New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force))
 Invoke-WebRequest -Uri $webDavUrlWithFile -OutFile $saveFilePath -Credential $credentials -UseBasicParsing
 Write-Host "Fichier téléchargé avec succès."
