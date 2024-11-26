@@ -22,11 +22,17 @@ if (-Not (Test-Path -Path $dirPath)) {
 # Création du compte ordinateur et sauvegarde du fichier texte en local.
 djoin.exe /provision /domain $domainName /machine $computerName /savefile $saveFilePath
 
-# Transfert du blob sur le serveur WebDAV
+# Transfert du blob sur le serveur WebDAV avec Invoke-WebRequest
 if (Test-Path -Path $saveFilePath) {
-    $webClient = New-Object System.Net.WebClient
-    $webClient.Credentials = New-Object System.Net.NetworkCredential($username,$password)
-    $webClient.UploadFile("$webDavUrl/$($computerName).txt", $saveFilePath)
+    try {
+        $webDavUrlWithFile = "$webDavUrl/$computerName.txt"
+        $credentials = New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force))
+        
+        Invoke-WebRequest -Uri $webDavUrlWithFile -Method Put -InFile $saveFilePath -Credential $credentials -UseBasicParsing
+        Write-Host "Fichier téléchargé avec succès."
+    } catch {
+        Write-Host "Erreur lors du téléchargement du fichier : $_"
+    }
 } else {
-    Write-Host "Une erreur a eu lieu et le fichier blob n'a pas été généré. Transfert annulé.."
+    Write-Host "Une erreur a eu lieu et le fichier blob n'a pas été généré. Transfert annulé."
 }

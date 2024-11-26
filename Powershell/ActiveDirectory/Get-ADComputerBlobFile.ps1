@@ -12,22 +12,22 @@ $saveFilePath = "C:\ADBlobs\$computerName.txt"
 $webDavUrl = ""
 $username = ""
 $password = ""
+$webDavUrlWithFile = "$webDavUrl/$computerName.txt"
 
 # Vérification du dossier C:\ADBlobs
 if (-Not (Test-Path -Path $dirPath)) {
     New-Item -ItemType Directory -Path $dirPath
 }
 
-# Transfert du blob depuis le serveur WebDAV
-$webClient = New-Object System.Net.WebClient
-$webClient.Credentials = New-Object System.Net.NetworkCredential($username,$password)
-$webClient.DownloadFile("$webDavUrl/$($computerName).txt", $saveFilePath)
+# Transfert du blob sur le serveur WebDAV avec Invoke-WebRequest
+$credentials = New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force))
+Invoke-WebRequest -Uri $webDavUrlWithFile -OutFile $saveFilePath -Credential $credentials -UseBasicParsing
+Write-Host "Fichier téléchargé avec succès."
 
-# Vérification du transfert
+
 if (Test-Path -Path $saveFilePath) {
-    # Appliquer le fichier d'adhésion
     djoin.exe /requestodj /loadfile $saveFilePath /windowspath %SystemRoot% /localos
     shutdown.exe -t 0 -r -f
 } else {
-    Write-Host "Fichier blob introuvable."
+    Write-Host "Une erreur a eu lieu et le fichier blob n'a pas été généré. Transfert annulé."
 }
