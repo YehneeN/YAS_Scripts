@@ -9,8 +9,8 @@ if ($7zipPath) {
     $currentVersion = $7zipPath.DisplayVersion
     Write-Output "7-Zip est installé. Version actuelle: $currentVersion"
 
-    if ($currentVersion -ne "24.08") {
-        Write-Output "7-zip non-conforme"
+    if ($currentVersion -ne "24.09") {
+        Write-Output "7-zip non-conforme - Dernière version = 24.09"
     } else {
         Write-Output "La version de 7-Zip est conforme."
     }

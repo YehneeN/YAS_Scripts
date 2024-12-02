@@ -10,18 +10,18 @@ if ($7zipPath) {
     $currentVersion = $7zipPath.DisplayVersion
     Write-Output "7-Zip est installé. Version actuelle: $currentVersion"
 
-    if ($currentVersion -ne "24.08") {
-        Write-Output "Version différente de 24.08. Désinstallation de 7-Zip..."
+    if ($currentVersion -ne "24.09") {
+        Write-Output "Version différente de 24.09. Désinstallation de 7-Zip..."
         Start-Process -FilePath $7zipPath.UninstallString -ArgumentList '/S' -Wait
         Start-Sleep -Seconds 60
 
         Write-Output "Téléchargement et installation de la dernière version de 7-Zip..."
         $installerPath = "$env:Temp\7zip.exe"
-        Invoke-WebRequest -Uri "https://7-zip.org/a/7z2408-x64.exe" -OutFile $installerPath
+        Invoke-WebRequest -Uri "https://www.7-zip.org/a/7z2409-x64.exe" -OutFile $installerPath
         Start-Process -FilePath $installerPath -ArgumentList '/S' -Wait
         Write-Output "Installation terminée."
     } else {
-        Write-Output "La version de 7-Zip est déjà 24.08."
+        Write-Output "La version de 7-Zip est déjà 24.09."
     }
 } else {
     Write-Output "7-Zip n'est pas installé."
