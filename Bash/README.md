@@ -1,15 +1,19 @@
-## Quick install script for my daily use
+<div align="center">
 
-- **Import [.zshrc](https://github.com/YehneeN/YAS_Scripts/blob/main/Bash/zshrc) only** :
+# Quick install script for my daily use on Debian distros...
 
+</div>
+
+## ⚙ ️Setup
+
+### Import .zshrc only :
 ```sh
 curl -sL https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/Bash/zshrc -o ~/.zshrc
 ```
 
 
-- **Start [full setup](https://github.com/YehneeN/YAS_Scripts/blob/main/Bash/Installation_DYS.sh)** :
 
+### Start full setup :
 ```sh
 /bin/bash -c "$(curl -sSLf https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/Bash/Installation_DYS.sh)"
 ```
-
