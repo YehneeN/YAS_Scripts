@@ -18,4 +18,3 @@ curl -sL https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/B
 ```sh
 /bin/bash -c "$(curl -sSLf https://raw.githubusercontent.com/YehneeN/YAS_Scripts/refs/heads/main/Bash/Installation_DYS.sh)"
 ```
-
